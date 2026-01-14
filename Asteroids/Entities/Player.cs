@@ -12,6 +12,11 @@ namespace Asteroids
         private float _drag = 0.98f;
         private float _maxSpeed = 400f;
 
+        public static Texture2D bulletTexture;
+
+        private MouseState _prevMouseState;
+        private MouseState _currMouseState;
+
         public Player(Texture2D texture, Vector2 startPos) : base(texture, startPos)
         {
             
@@ -60,6 +65,18 @@ namespace Asteroids
             base.Update(gameTime, viewport);
 
             // Shooting
+
+            _prevMouseState = _currMouseState;
+            _currMouseState = Mouse.GetState();
+
+            if(_currMouseState.LeftButton == ButtonState.Pressed &&
+               _prevMouseState.LeftButton == ButtonState.Released)
+            {
+                var bullet = new Bullet(bulletTexture, _position, _rotation);
+                EntityManager.Add(bullet);
+            }
+
+            base.Update(gameTime, viewport);
         }
     }
 }
