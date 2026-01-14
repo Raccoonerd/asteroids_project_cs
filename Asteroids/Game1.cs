@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace Asteroids;
 
@@ -8,6 +10,13 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+
+    private Player _player;
+
+    private Texture2D _shipTexture;
+    private Texture2D _bulletTexture;
+    private Texture2D _asteroidTexture;
+
 
     public Game1()
     {
@@ -26,6 +35,9 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        // Loading textures
+        _shipTexture = Content.Load<Texture2D>("ship-asteroids.png");
 
         // TODO: use this.Content to load your game content here
     }
