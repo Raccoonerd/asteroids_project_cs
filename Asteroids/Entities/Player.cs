@@ -31,9 +31,14 @@ namespace Asteroids
             // Rotation towards mouse
             
             Vector2 mousePos = new Vector2(mState.X, mState.Y);
-            Vector2 dirToMouse = mousePos = _position;
+            Vector2 dirToMouse = mousePos - _position;
 
             _rotation = (float)Math.Atan2(dirToMouse.Y, dirToMouse.X) + MathHelper.PiOver2;
+
+            if(dirToMouse != Vector2.Zero)
+            {
+                _rotation = (float)Math.Atan2(dirToMouse.Y, dirToMouse.X) + MathHelper.PiOver2;
+            }
 
             // Movement input
 
@@ -54,15 +59,13 @@ namespace Asteroids
 
             // Apply drag
 
-            _velocity *= _drag;
+            _velocity -= _velocity * _drag * deltaTime;
 
             if(_velocity.Length() > _maxSpeed)
             {
                 _velocity.Normalize();
                 _velocity *= _maxSpeed;
             }
-
-            base.Update(gameTime, viewport);
 
             // Shooting
 
@@ -72,8 +75,15 @@ namespace Asteroids
             if(_currMouseState.LeftButton == ButtonState.Pressed &&
                _prevMouseState.LeftButton == ButtonState.Released)
             {
-                var bullet = new Bullet(bulletTexture, _position, _rotation);
-                EntityManager.Add(bullet);
+                if(bulletTexture != null)
+                {
+                    Vector2 direction = new Vector2((float)Math.Cos(_rotation - MathHelper.PiOver2),
+                                                    (float)Math.Sin(_rotation - MathHelper.PiOver2));
+                    var bulletStartPos = _position + direction * (_radius + 5f);
+
+                    var bullet = new Bullet(bulletTexture, bulletStartPos, _rotation);
+                    EntityManager.Add(bullet);
+                }
             }
 
             base.Update(gameTime, viewport);

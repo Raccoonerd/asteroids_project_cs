@@ -25,6 +25,8 @@ namespace Asteroids
                 _entities.Add(entity);
             }
 
+            _addedEntities.Clear();
+
             // Updating entities
 
             foreach(var entity in _entities)
@@ -70,20 +72,20 @@ namespace Asteroids
         private static void HandleCollision(Entity e1, Entity e2)
         {
             // Bullet hits Asteroid
-            // if((e1 is Bullet && e2 is Asteroid) || (e2 is Bullet && e1 is Asteroid))
-            // {
-            //     e1.isExpired = true;
-            //     e2.isExpired = true;
-            // }
+            if((e1 is Bullet && e2 is Asteroid) || (e2 is Bullet && e1 is Asteroid))
+            {
+                e1.isExpired = true;
+                e2.isExpired = true;
+            }
 
-            // // Player hits Asteroid
-            // if((e1 is Player && e2 is Asteroids) || (e2 is Player && e1 is Asteroid))
-            // {
-            //     e1.isExpired = true;
-            //     e2.isExpired = true;
+            // Player hits Asteroid
+            if((e1 is Player && e2 is Asteroid) || (e2 is Player && e1 is Asteroid))
+            {
+                e1.isExpired = true;
+                e2.isExpired = true;
 
-            //     // Game Over screen could be triggered here
-            // }
+                // Game Over screen could be triggered here
+            }
         }
     }
 }

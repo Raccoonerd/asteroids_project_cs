@@ -23,11 +23,17 @@ public class Game1 : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+
+
+        IsFixedTimeStep = true;
+        TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
     }
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        _graphics.PreferredBackBufferWidth = 1280;
+        _graphics.PreferredBackBufferHeight = 720;
+        _graphics.ApplyChanges();
 
         base.Initialize();
     }
@@ -37,9 +43,19 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // Loading textures
-        _shipTexture = Content.Load<Texture2D>("ship-asteroids.png");
+        _shipTexture = Content.Load<Texture2D>("ship-asteroids");
+        _bulletTexture = Content.Load<Texture2D>("asteroids-bullet");
+        _asteroidTexture = Content.Load<Texture2D>("asteroids-asteroid");
 
-        // TODO: use this.Content to load your game content here
+        // Pasing bullet texture to player
+        Player.bulletTexture = _bulletTexture;
+
+        // Creating player
+        Vector2 center = new Vector2(_graphics.PreferredBackBufferWidth / 2,
+                                        _graphics.PreferredBackBufferHeight / 2);
+        _player = new Player(_shipTexture, center);
+
+        EntityManager.Add(_player);
     }
 
     protected override void Update(GameTime gameTime)
@@ -47,7 +63,8 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        EntityManager.Update(gameTime, GraphicsDevice.Viewport);
+        // TODO: game state update logic here
 
         base.Update(gameTime);
     }
@@ -56,7 +73,11 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.Black);
 
-        // TODO: Add your drawing code here
+        _spriteBatch.Begin();
+
+        EntityManager.Draw(_spriteBatch);
+
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
