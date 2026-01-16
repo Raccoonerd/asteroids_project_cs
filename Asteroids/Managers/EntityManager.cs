@@ -76,6 +76,8 @@ namespace Asteroids
             {
                 e1.isExpired = true;
                 e2.isExpired = true;
+
+                GameManager.AddScore(10);
             }
 
             // Player hits Asteroid

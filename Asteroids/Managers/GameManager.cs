@@ -8,6 +8,7 @@ namespace Asteroids
     {
         public static int _level = 0;
         public static float _respawnTimer = 0;
+        public static int _score = 0;
 
         private static Texture2D _asteroidTexture;
         private static Vector2 _screenSize;
@@ -17,6 +18,7 @@ namespace Asteroids
             _asteroidTexture = asteroidTexture;
             _screenSize = screenSize;
             _level = 0;
+            _score = 0;
         }
 
         public static void Update(GameTime gameTime)
@@ -78,8 +80,14 @@ namespace Asteroids
         public static void Reset()
         {
             _level = 0;
+            _score = 0;
             EntityManager.Clear();
             _respawnTimer = 0f;
+        }
+
+        public static void AddScore(int points)
+        {
+            _score += points;
         }
     }
 }

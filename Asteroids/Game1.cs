@@ -28,6 +28,8 @@ public class Game1 : Game
 
     private Texture2D _backgroundTexture;
 
+    private Texture2D _titleTexture;
+
 
     public Game1()
     {
@@ -57,6 +59,7 @@ public class Game1 : Game
         // Loading textures
         _font = Content.Load<SpriteFont>("font");
         _shipTexture = Content.Load<Texture2D>("ship-asteroids");
+        _titleTexture = Content.Load<Texture2D>("asteroids-title");
         _bulletTexture = Content.Load<Texture2D>("asteroids-bullet");
         _asteroidTexture = Content.Load<Texture2D>("asteroids-asteroid");
         _backgroundTexture = Content.Load<Texture2D>("asteroids-background");
@@ -76,6 +79,8 @@ public class Game1 : Game
                         _graphics.PreferredBackBufferHeight
                         )
         );
+
+        UIManager.Initialize(_font, GraphicsDevice.Viewport, _titleTexture);
     }
 
     protected override void Update(GameTime gameTime)
@@ -141,17 +146,11 @@ public class Game1 : Game
         switch(_currGameState)
         {
             case GameState.Menu:
-                string menuText = "ASTEROIDS\n\nPress ENTER to Start";
-                Vector2 menuSize = _font.MeasureString(menuText);
-                _spriteBatch.DrawString(
-                    _font,
-                    menuText,
-                    center - menuSize / 2f,
-                    Color.White
-                );
+                UIManager.DrawMenu(_spriteBatch);
                 break;
             case GameState.Playing:
                 EntityManager.Draw(_spriteBatch);
+                UIManager.DrawGameplay(_spriteBatch);
                 break;
             case GameState.GameOver:
                 string gameOverText = "GAME OVER\n\nPress ENTER to Restart";
