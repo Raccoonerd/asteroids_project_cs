@@ -87,5 +87,15 @@ namespace Asteroids
                 // Game Over screen could be triggered here
             }
         }
+
+        public static int GetAsteroidCount()
+        {
+            return _entities.Count(x => x is Asteroid);
+        }
+
+        public static bool IsPlayerAlive()
+        {
+            return _entities.Any(x => x is Player);
+        }
     }
 }

@@ -56,6 +56,28 @@ public class Game1 : Game
         _player = new Player(_shipTexture, center);
 
         EntityManager.Add(_player);
+
+        // Creating asteroids
+        Random rand = new Random();
+        for(int i = 0; i < 5; i++)
+        {
+            int x = rand.Next(0, _graphics.PreferredBackBufferWidth);
+            int y = rand.Next(0, _graphics.PreferredBackBufferHeight);
+            Vector2 pos = new Vector2(x, y);
+
+            if(Vector2.Distance(pos, center) < 100)
+            {
+                i--;
+                continue;
+            }
+
+            Vector2 velocity = new Vector2((float)(rand.NextDouble() * 2 - 1),
+                                           (float)(rand.NextDouble() * 2 - 1));
+            velocity.Normalize();
+            velocity *= rand.Next(50, 150);
+            var asteroid = new Asteroid(_asteroidTexture, pos, velocity);
+            EntityManager.Add(asteroid);
+        }
     }
 
     protected override void Update(GameTime gameTime)
@@ -73,7 +95,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.Black);
 
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         EntityManager.Draw(_spriteBatch);
 

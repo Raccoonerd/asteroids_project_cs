@@ -69,5 +69,12 @@ namespace Asteroids
                 EntityManager.Add(asteroid);
             }
         }
+
+        public static void Reset()
+        {
+            _level = 0;
+            EntityManager.Clear();
+            _respawnTimer = 0f;
+        }
     }
 }

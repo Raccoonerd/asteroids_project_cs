@@ -9,13 +9,15 @@ namespace Asteroids
     public class Player : Entity
     {
         private float _thrust = 400f;
-        private float _drag = 0.98f;
-        private float _maxSpeed = 400f;
+        private float _drag = 1.5f;
+        private float _maxSpeed = 450f;
+
+        private float _rotationSpeed = 3.5f;
+
+        private KeyboardState _prevKeyState;
+        private KeyboardState _currKeyState;
 
         public static Texture2D bulletTexture;
-
-        private MouseState _prevMouseState;
-        private MouseState _currMouseState;
 
         public Player(Texture2D texture, Vector2 startPos) : base(texture, startPos)
         {
@@ -24,37 +26,23 @@ namespace Asteroids
 
         public override void Update(GameTime gameTime, Viewport viewport)
         {
-            var kState = Keyboard.GetState();
-            var mState = Mouse.GetState();
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Rotation towards mouse
-            
-            Vector2 mousePos = new Vector2(mState.X, mState.Y);
-            Vector2 dirToMouse = mousePos - _position;
+            _currKeyState = Keyboard.GetState();
 
-            _rotation = (float)Math.Atan2(dirToMouse.Y, dirToMouse.X) + MathHelper.PiOver2;
+            // Rotation
 
-            if(dirToMouse != Vector2.Zero)
-            {
-                _rotation = (float)Math.Atan2(dirToMouse.Y, dirToMouse.X) + MathHelper.PiOver2;
-            }
+            if (_currKeyState.IsKeyDown(Keys.A)) _rotation -= _rotationSpeed * deltaTime;
+            if (_currKeyState.IsKeyDown(Keys.D)) _rotation += _rotationSpeed * deltaTime;
 
             // Movement input
 
-            Vector2 inputDir = Vector2.Zero;
+            Vector2 direction = new Vector2((float)Math.Cos(_rotation - MathHelper.PiOver2),
+                                            (float)Math.Sin(_rotation - MathHelper.PiOver2));
 
-            if(kState.IsKeyDown(Keys.W)) inputDir.Y -= 1;
-            if(kState.IsKeyDown(Keys.S)) inputDir.Y += 1;
-            if(kState.IsKeyDown(Keys.A)) inputDir.X -= 1;
-            if(kState.IsKeyDown(Keys.D)) inputDir.X += 1;
-
-            // Normalize diagonal movement
-
-            if(inputDir != Vector2.Zero)
+            if (_currKeyState.IsKeyDown(Keys.W))
             {
-                inputDir.Normalize();
-                _velocity += inputDir * _thrust * deltaTime;
+                _velocity += direction * _thrust * deltaTime;
             }
 
             // Apply drag
@@ -69,22 +57,19 @@ namespace Asteroids
 
             // Shooting
 
-            _prevMouseState = _currMouseState;
-            _currMouseState = Mouse.GetState();
-
-            if(_currMouseState.LeftButton == ButtonState.Pressed &&
-               _prevMouseState.LeftButton == ButtonState.Released)
+            if(_currKeyState.IsKeyDown(Keys.Space)&&
+               _prevKeyState.IsKeyUp(Keys.Space))
             {
                 if(bulletTexture != null)
                 {
-                    Vector2 direction = new Vector2((float)Math.Cos(_rotation - MathHelper.PiOver2),
-                                                    (float)Math.Sin(_rotation - MathHelper.PiOver2));
                     var bulletStartPos = _position + direction * (_radius + 5f);
 
                     var bullet = new Bullet(bulletTexture, bulletStartPos, _rotation);
                     EntityManager.Add(bullet);
                 }
             }
+
+            _prevKeyState = _currKeyState;
 
             base.Update(gameTime, viewport);
         }

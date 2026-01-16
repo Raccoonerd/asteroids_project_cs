@@ -20,7 +20,7 @@ namespace Asteroids
             
             _velocity = direction * _speed;
 
-            _radius = 2f;
+            _radius = 2f * _scale;
         }
 
         public override void Update(GameTime gameTime, Viewport viewport)
@@ -29,7 +29,11 @@ namespace Asteroids
 
             _lifespan -= deltaTime;
 
-            if(_lifespan <= 0f)
+            if(_lifespan <= 0f ||
+                _position.X < 0 ||
+                _position.X > viewport.Width ||
+                _position.Y < 0 ||
+                _position.Y > viewport.Height)
             {
                 isExpired = true;
             }

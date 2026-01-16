@@ -16,6 +16,8 @@ namespace Asteroids
 
         public float _radius;
 
+        public float _scale = 2f;
+
         public Entity(Texture2D texture, Vector2 startPos)
         {
             _texture = texture;
@@ -27,7 +29,7 @@ namespace Asteroids
             if(_texture != null)
             {
                 _origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
-                _radius = (_texture.Width/2f);
+                _radius = (_texture.Width/2f) * _scale;
             }
         }
 
@@ -68,7 +70,7 @@ namespace Asteroids
                 Color.White,
                 _rotation,
                 _origin,
-                Vector2.One,
+                new Vector2(_scale, _scale),
                 SpriteEffects.None,
                 0f
             );
