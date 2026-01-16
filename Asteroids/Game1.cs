@@ -26,6 +26,8 @@ public class Game1 : Game
     private Texture2D _bulletTexture;
     private Texture2D _asteroidTexture;
 
+    private Texture2D _backgroundTexture;
+
 
     public Game1()
     {
@@ -57,6 +59,7 @@ public class Game1 : Game
         _shipTexture = Content.Load<Texture2D>("ship-asteroids");
         _bulletTexture = Content.Load<Texture2D>("asteroids-bullet");
         _asteroidTexture = Content.Load<Texture2D>("asteroids-asteroid");
+        _backgroundTexture = Content.Load<Texture2D>("asteroids-background");
         }
         catch
         {
@@ -114,6 +117,21 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.Black);
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+        Rectangle screenRect = new Rectangle(
+            0, 0, 
+            _graphics.PreferredBackBufferWidth, 
+            _graphics.PreferredBackBufferHeight
+        );
+
+        if(_backgroundTexture != null)
+        {
+            _spriteBatch.Draw(
+                _backgroundTexture, 
+                screenRect, 
+                Color.White
+            );
+        }
 
         Vector2 center = new Vector2(
             _graphics.PreferredBackBufferWidth / 2f,
