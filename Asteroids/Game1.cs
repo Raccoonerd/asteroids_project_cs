@@ -153,14 +153,7 @@ public class Game1 : Game
                 UIManager.DrawGameplay(_spriteBatch);
                 break;
             case GameState.GameOver:
-                string gameOverText = "GAME OVER\n\nPress ENTER to Restart";
-                Vector2 gameOverSize = _font.MeasureString(gameOverText);
-                _spriteBatch.DrawString(
-                    _font,
-                    gameOverText,
-                    center - gameOverSize / 2f,
-                    Color.White
-                );
+                UIManager.DrawGameOver(_spriteBatch);
                 break;
         }
 

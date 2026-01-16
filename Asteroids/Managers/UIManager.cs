@@ -68,7 +68,9 @@ namespace Asteroids
 
         public static void DrawGameOver(SpriteBatch spriteBatch)
         {
- 
+            DrawCenteredText(spriteBatch, "GAME OVER", -100f, Color.Maroon, 2.0f);
+            DrawCenteredText(spriteBatch, $"Your score: {GameManager._score}", 0f, Color.DarkOrchid, 1.5f);
+            DrawCenteredText(spriteBatch, "Press ENTER to Start", 50f, Color.MediumPurple);
         }
 
         private static void DrawCenteredText(SpriteBatch spriteBatch, string text, float offsetY, Color color, float scale = 1.0f)
