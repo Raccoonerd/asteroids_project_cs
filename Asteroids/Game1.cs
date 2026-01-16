@@ -2,16 +2,25 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 
 namespace Asteroids;
+
+public enum GameState
+{
+    Menu,
+    Playing,
+    GameOver
+}
 
 public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    private GameState _currGameState = GameState.Menu;
+
     private Player _player;
+    private SpriteFont _font;
 
     private Texture2D _shipTexture;
     private Texture2D _bulletTexture;
@@ -42,51 +51,60 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        try{
         // Loading textures
+        _font = Content.Load<SpriteFont>("font");
         _shipTexture = Content.Load<Texture2D>("ship-asteroids");
         _bulletTexture = Content.Load<Texture2D>("asteroids-bullet");
         _asteroidTexture = Content.Load<Texture2D>("asteroids-asteroid");
-
+        }
+        catch
+        {
+            System.Console.WriteLine("Error loading assets.");
+            throw;
+        }
         // Pasing bullet texture to player
         Player.bulletTexture = _bulletTexture;
 
-        // Creating player
-        Vector2 center = new Vector2(_graphics.PreferredBackBufferWidth / 2,
-                                        _graphics.PreferredBackBufferHeight / 2);
-        _player = new Player(_shipTexture, center);
-
-        EntityManager.Add(_player);
-
-        // Creating asteroids
-        Random rand = new Random();
-        for(int i = 0; i < 5; i++)
-        {
-            int x = rand.Next(0, _graphics.PreferredBackBufferWidth);
-            int y = rand.Next(0, _graphics.PreferredBackBufferHeight);
-            Vector2 pos = new Vector2(x, y);
-
-            if(Vector2.Distance(pos, center) < 100)
-            {
-                i--;
-                continue;
-            }
-
-            Vector2 velocity = new Vector2((float)(rand.NextDouble() * 2 - 1),
-                                           (float)(rand.NextDouble() * 2 - 1));
-            velocity.Normalize();
-            velocity *= rand.Next(50, 150);
-            var asteroid = new Asteroid(_asteroidTexture, pos, velocity);
-            EntityManager.Add(asteroid);
-        }
+        GameManager.Initialize
+        (
+            _asteroidTexture, 
+            new Vector2(_graphics.PreferredBackBufferWidth, 
+                        _graphics.PreferredBackBufferHeight
+                        )
+        );
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
+            Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        EntityManager.Update(gameTime, GraphicsDevice.Viewport);
-        // TODO: game state update logic here
+        switch(_currGameState)
+        {
+            case GameState.Menu:
+                if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    StartGame();
+                }
+                break;
+            case GameState.Playing:
+                EntityManager.Update(gameTime, GraphicsDevice.Viewport);
+                GameManager.Update(gameTime);
+
+                if(!EntityManager.IsPlayerAlive())
+                {
+                    _currGameState = GameState.GameOver;
+                }
+                break;
+            case GameState.GameOver:
+                if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    StartGame();
+                }
+                break;
+        }
 
         base.Update(gameTime);
     }
@@ -97,10 +115,55 @@ public class Game1 : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        EntityManager.Draw(_spriteBatch);
+        Vector2 center = new Vector2(
+            _graphics.PreferredBackBufferWidth / 2f,
+            _graphics.PreferredBackBufferHeight / 2f
+        );
+        
+        switch(_currGameState)
+        {
+            case GameState.Menu:
+                string menuText = "ASTEROIDS\n\nPress ENTER to Start";
+                Vector2 menuSize = _font.MeasureString(menuText);
+                _spriteBatch.DrawString(
+                    _font,
+                    menuText,
+                    center - menuSize / 2f,
+                    Color.White
+                );
+                break;
+            case GameState.Playing:
+                EntityManager.Draw(_spriteBatch);
+                break;
+            case GameState.GameOver:
+                string gameOverText = "GAME OVER\n\nPress ENTER to Restart";
+                Vector2 gameOverSize = _font.MeasureString(gameOverText);
+                _spriteBatch.DrawString(
+                    _font,
+                    gameOverText,
+                    center - gameOverSize / 2f,
+                    Color.White
+                );
+                break;
+        }
 
         _spriteBatch.End();
 
         base.Draw(gameTime);
+    }
+
+    private void StartGame()
+    {
+        GameManager.Reset();
+
+        Vector2 center = new Vector2(
+            _graphics.PreferredBackBufferWidth / 2f,
+            _graphics.PreferredBackBufferHeight / 2f
+        );
+
+        _player = new Player(_shipTexture, center);
+        EntityManager.Add(_player);
+
+        _currGameState = GameState.Playing;
     }
 }
