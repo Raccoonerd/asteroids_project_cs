@@ -6,6 +6,7 @@ Desktop.ini
 **/obj/
 
 .config/
+!.config/dotnet-tools.json
 packages/
 
 .vs/
