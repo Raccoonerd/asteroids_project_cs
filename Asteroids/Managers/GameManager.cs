@@ -39,6 +39,10 @@ namespace Asteroids
         private static void SpawnWave(int level)
         {
             Random rand = new Random();
+
+            Player player = EntityManager.GetPlayer();
+
+            Vector2 safeZone = player != null ? player._position : _screenSize / 2f;
             
             int asteroidCount = 3 + level;
 
@@ -49,11 +53,12 @@ namespace Asteroids
                     rand.Next(0, (int)_screenSize.Y)
                 );
 
-                Vector2 center = _screenSize / 2f;
-
-                if(Vector2.Distance(pos, center) < 100f)
+                while(Vector2.Distance(pos, safeZone) < 250f)
                 {
-                    pos.X = (pos.X + 200) %  _screenSize.X;
+                    pos = new Vector2(
+                        rand.Next(0, (int)_screenSize.X),
+                        rand.Next(0, (int)_screenSize.Y)
+                    );
                 }
 
                 float speed = 1.0f + (level * 0.1f);

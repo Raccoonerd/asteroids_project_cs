@@ -97,5 +97,10 @@ namespace Asteroids
         {
             return _entities.Any(x => x is Player);
         }
+
+        public static Player GetPlayer()
+        {
+            return _entities.OfType<Player>().FirstOrDefault();
+        }
     }
 }
