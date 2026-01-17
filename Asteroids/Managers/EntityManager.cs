@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace Asteroids
         private static List<Entity> _entities = new List<Entity>();
 
         private static List<Entity> _addedEntities = new List<Entity>();
+
+        public static SoundEffect _explosionSound;
 
         public static void Add(Entity entity)
         {
@@ -72,7 +75,8 @@ namespace Asteroids
             {
                 e1.isExpired = true;
                 e2.isExpired = true;
-
+                
+                _explosionSound.Play();
                 GameManager.AddScore(10);
             }
 

@@ -40,6 +40,7 @@ public class Game1 : Game
     private SoundEffect _shootSound;
     private SoundEffect _uiChangeSound;
     private SoundEffect _startGameSound;
+    private SoundEffect _explosionSound;
 
 
     public Game1()
@@ -82,6 +83,7 @@ public class Game1 : Game
         _shootSound = Content.Load<SoundEffect>("asteroids-shoot");
         _uiChangeSound = Content.Load<SoundEffect>("asteroids-ui-change");
         _startGameSound = Content.Load<SoundEffect>("asteroids-gameStart");
+        _explosionSound = Content.Load<SoundEffect>("asteroids-explosion");
         }
         catch
         {
@@ -94,6 +96,8 @@ public class Game1 : Game
         Player._shootSound = this._shootSound;
 
         UIManager._uiChangeSound = this._uiChangeSound;
+
+        EntityManager._explosionSound = this._explosionSound;
 
         GameManager.Initialize
         (
