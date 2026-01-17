@@ -61,6 +61,12 @@
 /processorParam:TextureFormat=Color
 /build:asteroids-gameover.png
 
+#begin asteroids-shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:asteroids-shoot.wav
+
 #begin asteroids-title.png
 /importer:TextureImporter
 /processor:TextureProcessor

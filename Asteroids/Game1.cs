@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -31,6 +32,8 @@ public class Game1 : Game
     private Texture2D _gameOverTexture;
     private Texture2D _backgroundTexture;
 
+    private SoundEffect _shootSound;
+
 
     public Game1()
     {
@@ -61,12 +64,15 @@ public class Game1 : Game
         try{
         // Loading textures
         _font = Content.Load<SpriteFont>("font");
-        _gameOverTexture = Content.Load<Texture2D>("asteroids-gameover");
         _shipTexture = Content.Load<Texture2D>("ship-asteroids");
         _titleTexture = Content.Load<Texture2D>("asteroids-title");
         _bulletTexture = Content.Load<Texture2D>("asteroids-bullet");
+        _gameOverTexture = Content.Load<Texture2D>("asteroids-gameover");
         _asteroidTexture = Content.Load<Texture2D>("asteroids-asteroid");
         _backgroundTexture = Content.Load<Texture2D>("asteroids-background");
+
+        // Loading sounds
+        _shootSound = Content.Load<SoundEffect>("asteroids-shoot");
         }
         catch
         {
@@ -74,7 +80,8 @@ public class Game1 : Game
             throw;
         }
         // Pasing bullet texture to player
-        Player.bulletTexture = _bulletTexture;
+        Player._bulletTexture = this._bulletTexture;
+        Player._shootSound = this._shootSound;
 
         GameManager.Initialize
         (

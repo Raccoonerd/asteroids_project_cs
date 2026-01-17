@@ -6,7 +6,7 @@ namespace Asteroids
 {
     public class Bullet : Entity
     {
-        private float _lifespan = 2f; // seconds
+        private float _lifespan = 1.5f; // seconds
         private float _speed = 800f;
         public Bullet(Texture2D texture, Vector2 startPos, float rotation) : base(texture, startPos)
         {
@@ -30,12 +30,8 @@ namespace Asteroids
 
             _lifespan -= deltaTime;
 
-            // Expire bullet if lifespan is over or out of bounds
-            if(_lifespan <= 0f ||
-                _position.X < 0 ||
-                _position.X > viewport.Width ||
-                _position.Y < 0 ||
-                _position.Y > viewport.Height)
+            // Expire bullet if lifespan is over
+            if(_lifespan <= 0f)
             {
                 isExpired = true;
             }

@@ -1,5 +1,6 @@
 using Asteroids;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -17,7 +18,8 @@ namespace Asteroids
         private KeyboardState _prevKeyState;
         private KeyboardState _currKeyState;
 
-        public static Texture2D bulletTexture;
+        public static Texture2D _bulletTexture;
+        public static SoundEffect _shootSound;
 
         public Player(Texture2D texture, Vector2 startPos) : base(texture, startPos)
         {
@@ -56,12 +58,13 @@ namespace Asteroids
             if(_currKeyState.IsKeyDown(Keys.Space)&&
                _prevKeyState.IsKeyUp(Keys.Space))
             {
-                if(bulletTexture != null)
+                if(_bulletTexture != null)
                 {
                     var bulletStartPos = _position + direction * (_radius + 5f);
 
-                    var bullet = new Bullet(bulletTexture, bulletStartPos, _rotation);
+                    var bullet = new Bullet(_bulletTexture, bulletStartPos, _rotation);
                     EntityManager.Add(bullet);
+                    _shootSound.Play();
                 }
             }
 
