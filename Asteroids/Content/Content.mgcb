@@ -61,6 +61,12 @@
 /processorParam:TextureFormat=Color
 /build:asteroids-gameover.png
 
+#begin asteroids-gameStart.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:asteroids-gameStart.wav
+
 #begin asteroids-shoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -78,6 +84,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:asteroids-title.png
+
+#begin asteroids-ui-change.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:asteroids-ui-change.wav
 
 #begin font.spritefont
 /importer:FontDescriptionImporter

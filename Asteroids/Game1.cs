@@ -38,6 +38,8 @@ public class Game1 : Game
     private Texture2D _backgroundTexture;
 
     private SoundEffect _shootSound;
+    private SoundEffect _uiChangeSound;
+    private SoundEffect _startGameSound;
 
 
     public Game1()
@@ -78,15 +80,20 @@ public class Game1 : Game
 
         // Loading sounds
         _shootSound = Content.Load<SoundEffect>("asteroids-shoot");
+        _uiChangeSound = Content.Load<SoundEffect>("asteroids-ui-change");
+        _startGameSound = Content.Load<SoundEffect>("asteroids-gameStart");
         }
         catch
         {
             System.Console.WriteLine("Error loading assets.");
             throw;
         }
+
         // Pasing bullet texture to player
         Player._bulletTexture = this._bulletTexture;
         Player._shootSound = this._shootSound;
+
+        UIManager._uiChangeSound = this._uiChangeSound;
 
         GameManager.Initialize
         (
@@ -193,6 +200,7 @@ public class Game1 : Game
 
     public void StartGame()
     {
+        _startGameSound.Play();
         GameManager.Reset();
 
         Vector2 center = new Vector2(

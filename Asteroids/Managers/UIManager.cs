@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -14,6 +15,8 @@ namespace Asteroids
         private static Vector2 _screenSize;
 
         private static int _selectIndex = 0;
+
+        public static SoundEffect _uiChangeSound;
 
         public static void Initialize(SpriteFont font, Viewport viewport, Texture2D titleTexture, Texture2D gameOverTexture)
         {
@@ -31,12 +34,14 @@ namespace Asteroids
                currKState.IsKeyDown(Keys.S))
             {
                 _selectIndex = (_selectIndex + 1) % 2;
+                _uiChangeSound.Play();
             }
 
             if(prevKState.IsKeyUp(Keys.W) &&
                currKState.IsKeyDown(Keys.W))
             {
                 _selectIndex = (_selectIndex - 1 + 2) % 2;
+                _uiChangeSound.Play();
             }
 
             if(prevKState.IsKeyUp(Keys.Enter) &&
