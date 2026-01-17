@@ -18,6 +18,8 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
 
     private GameState _currGameState = GameState.Menu;
+    private KeyboardState _prevKState;
+    private KeyboardState _currKState;
 
     private Player _player;
     private SpriteFont _font;
@@ -91,11 +93,14 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        _currKState = Keyboard.GetState();
+
         // Game state management
         switch(_currGameState)
         {
             case GameState.Menu:
-                if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                if(_prevKState.IsKeyUp(Keys.Enter) &&
+                    _currKState.IsKeyDown(Keys.Enter))
                 {
                     StartGame();
                 }
@@ -110,13 +115,15 @@ public class Game1 : Game
                 }
                 break;
             case GameState.GameOver:
-                if(Keyboard.GetState().IsKeyDown(Keys.Space))
+                if(_prevKState.IsKeyUp(Keys.Enter) &&
+                    _currKState.IsKeyDown(Keys.Enter))
                 {
                     _currGameState = GameState.Menu;
                 }
                 break;
         }
 
+        _prevKState = _currKState;
         base.Update(gameTime);
     }
 
@@ -171,7 +178,7 @@ public class Game1 : Game
     private void StartGame()
     {
         GameManager.Reset();
-        
+
         Vector2 center = new Vector2(
             _graphics.PreferredBackBufferWidth / 2f,
             _graphics.PreferredBackBufferHeight / 2f

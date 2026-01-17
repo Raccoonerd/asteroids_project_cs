@@ -89,10 +89,15 @@ namespace Asteroids
             }
 
             DrawCenteredText(spriteBatch, $"Your score: {GameManager._score}", 0f, Color.DarkOrchid, 1.5f);
-            DrawCenteredText(spriteBatch, "Press SPACE to Continue", 50f, Color.MediumPurple);
+            DrawCenteredText(spriteBatch, "Press ENTER to Continue", 50f, Color.MediumPurple);
         }
 
-        private static void DrawCenteredText(SpriteBatch spriteBatch, string text, float offsetY, Color color, float scale = 1.0f)
+        private static void DrawCenteredText(
+            SpriteBatch spriteBatch, 
+            string text, 
+            float offsetY, 
+            Color color, 
+            float scale = 1.0f)
         {
             if(_font == null) return;
 
