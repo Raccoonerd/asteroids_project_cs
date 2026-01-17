@@ -6,12 +6,12 @@ namespace Asteroids
 {
     public static class GameManager
     {
+        public static int _score = 0;
         public static int _level = 0;
         public static float _respawnTimer = 0;
-        public static int _score = 0;
 
-        private static Texture2D _asteroidTexture;
         private static Vector2 _screenSize;
+        private static Texture2D _asteroidTexture;
 
         public static void Initialize(Texture2D asteroidTexture, Vector2 screenSize)
         {
@@ -23,6 +23,7 @@ namespace Asteroids
 
         public static void Update(GameTime gameTime)
         {
+            // Check if all asteroids are destroyed
             int count = EntityManager.GetAsteroidCount();
 
             if(count == 0)
@@ -40,16 +41,20 @@ namespace Asteroids
 
         private static void SpawnWave(int level)
         {
+            // Spawn asteroids based on the current level
             Random rand = new Random();
 
+            // Get player position to avoid spawning asteroids too close
             Player player = EntityManager.GetPlayer();
 
             Vector2 safeZone = player != null ? player._position : _screenSize / 2f;
-            
+
+            // Determine number of asteroids to spawn            
             int asteroidCount = 3 + level;
 
             for (int i = 0; i < asteroidCount; i++)
             {
+                // Random position outside safe zone
                 Vector2 pos = new Vector2(
                     rand.Next(0, (int)_screenSize.X),
                     rand.Next(0, (int)_screenSize.Y)
@@ -63,6 +68,7 @@ namespace Asteroids
                     );
                 }
 
+                // Random velocity
                 float speed = 1.0f + (level * 0.1f);
 
                 Vector2 velocity = new Vector2(

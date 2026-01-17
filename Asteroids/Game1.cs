@@ -23,27 +23,28 @@ public class Game1 : Game
     private SpriteFont _font;
 
     private Texture2D _shipTexture;
+    private Texture2D _titleTexture;
     private Texture2D _bulletTexture;
     private Texture2D _asteroidTexture;
-
+    private Texture2D _gameOverTexture;
     private Texture2D _backgroundTexture;
-
-    private Texture2D _titleTexture;
 
 
     public Game1()
     {
+        // Initialize graphics device
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-
+        // Set fixed time step for consistent updates
         IsFixedTimeStep = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
     }
 
     protected override void Initialize()
     {
+        // Set preferred window size
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
@@ -58,6 +59,7 @@ public class Game1 : Game
         try{
         // Loading textures
         _font = Content.Load<SpriteFont>("font");
+        _gameOverTexture = Content.Load<Texture2D>("asteroids-gameover");
         _shipTexture = Content.Load<Texture2D>("ship-asteroids");
         _titleTexture = Content.Load<Texture2D>("asteroids-title");
         _bulletTexture = Content.Load<Texture2D>("asteroids-bullet");
@@ -80,7 +82,7 @@ public class Game1 : Game
                         )
         );
 
-        UIManager.Initialize(_font, GraphicsDevice.Viewport, _titleTexture);
+        UIManager.Initialize(_font, GraphicsDevice.Viewport, _titleTexture, _gameOverTexture);
     }
 
     protected override void Update(GameTime gameTime)
@@ -89,6 +91,7 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        // Game state management
         switch(_currGameState)
         {
             case GameState.Menu:
@@ -107,9 +110,9 @@ public class Game1 : Game
                 }
                 break;
             case GameState.GameOver:
-                if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                if(Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
-                    StartGame();
+                    _currGameState = GameState.Menu;
                 }
                 break;
         }
@@ -123,6 +126,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
+        // Draw background
         Rectangle screenRect = new Rectangle(
             0, 0, 
             _graphics.PreferredBackBufferWidth, 
@@ -138,11 +142,13 @@ public class Game1 : Game
             );
         }
 
+        // Center point for UI
         Vector2 center = new Vector2(
             _graphics.PreferredBackBufferWidth / 2f,
             _graphics.PreferredBackBufferHeight / 2f
         );
         
+        // Game state drawing
         switch(_currGameState)
         {
             case GameState.Menu:
@@ -165,7 +171,7 @@ public class Game1 : Game
     private void StartGame()
     {
         GameManager.Reset();
-
+        
         Vector2 center = new Vector2(
             _graphics.PreferredBackBufferWidth / 2f,
             _graphics.PreferredBackBufferHeight / 2f

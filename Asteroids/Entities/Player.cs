@@ -31,12 +31,10 @@ namespace Asteroids
             _currKeyState = Keyboard.GetState();
 
             // Rotation
-
             if (_currKeyState.IsKeyDown(Keys.A)) _rotation -= _rotationSpeed * deltaTime;
             if (_currKeyState.IsKeyDown(Keys.D)) _rotation += _rotationSpeed * deltaTime;
 
             // Movement input
-
             Vector2 direction = new Vector2((float)Math.Cos(_rotation - MathHelper.PiOver2),
                                             (float)Math.Sin(_rotation - MathHelper.PiOver2));
 
@@ -46,7 +44,6 @@ namespace Asteroids
             }
 
             // Apply drag
-
             _velocity -= _velocity * _drag * deltaTime;
 
             if(_velocity.Length() > _maxSpeed)
@@ -56,7 +53,6 @@ namespace Asteroids
             }
 
             // Shooting
-
             if(_currKeyState.IsKeyDown(Keys.Space)&&
                _prevKeyState.IsKeyUp(Keys.Space))
             {

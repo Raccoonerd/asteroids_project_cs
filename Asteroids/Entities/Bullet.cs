@@ -25,10 +25,12 @@ namespace Asteroids
 
         public override void Update(GameTime gameTime, Viewport viewport)
         {
+            // Update lifespan
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _lifespan -= deltaTime;
 
+            // Expire bullet if lifespan is over or out of bounds
             if(_lifespan <= 0f ||
                 _position.X < 0 ||
                 _position.X > viewport.Width ||

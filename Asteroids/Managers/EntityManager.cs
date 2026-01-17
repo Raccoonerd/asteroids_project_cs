@@ -19,7 +19,6 @@ namespace Asteroids
         public static void Update(GameTime gameTime, Viewport viewport)
         {
             // Moving entities from added list to main list
-
             foreach(var entity in _addedEntities)
             {
                 _entities.Add(entity);
@@ -28,14 +27,12 @@ namespace Asteroids
             _addedEntities.Clear();
 
             // Updating entities
-
             foreach(var entity in _entities)
             {
                 entity.Update(gameTime, viewport);
             }
 
             // Checking collisions
-
             for(int i = 0; i < _entities.Count; i++)
             {
                 for(int j = i+1; j < _entities.Count; j++)
@@ -51,7 +48,6 @@ namespace Asteroids
             }
 
             // Removing expired entities
-
             _entities.RemoveAll(x => x.isExpired);
         }
 
@@ -85,8 +81,6 @@ namespace Asteroids
             {
                 e1.isExpired = true;
                 e2.isExpired = true;
-
-                // Game Over screen could be triggered here
             }
         }
 

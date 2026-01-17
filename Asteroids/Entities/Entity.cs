@@ -26,6 +26,7 @@ namespace Asteroids
             _rotation = 0f;
             isExpired = false;
 
+            // Calculate origin and radius
             if(_texture != null)
             {
                 _origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
@@ -35,10 +36,13 @@ namespace Asteroids
 
         public virtual void Update(GameTime gameTime, Viewport viewport)
         {
+            // Update position based on velocity
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            // Move entity
             _position += _velocity * deltaTime;
 
+            // Screen wrapping
             float margin = _radius;
 
             if(_position.X > viewport.Width + margin)
@@ -49,7 +53,6 @@ namespace Asteroids
             {
                 _position.X = viewport.Width + margin;
             }
-
 
             if (_position.Y > viewport.Height + margin)
             { 
