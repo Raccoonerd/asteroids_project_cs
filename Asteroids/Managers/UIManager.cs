@@ -1,6 +1,7 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Asteroids
 {
@@ -12,6 +13,8 @@ namespace Asteroids
         private static Vector2 _screenCenter;
         private static Vector2 _screenSize;
 
+        private static int _selectIndex = 0;
+
         public static void Initialize(SpriteFont font, Viewport viewport, Texture2D titleTexture, Texture2D gameOverTexture)
         {
             _font = font;
@@ -19,6 +22,37 @@ namespace Asteroids
             _gameOverTexture = gameOverTexture;
             _screenSize = new Vector2(viewport.Width, viewport.Height);
             _screenCenter = _screenSize / 2f;
+            _selectIndex = 0;
+        }
+
+        public static int UpdateMenu(KeyboardState currKState, KeyboardState prevKState)
+        {
+            if(prevKState.IsKeyUp(Keys.S) &&
+               currKState.IsKeyDown(Keys.S))
+            {
+                _selectIndex = (_selectIndex + 1) % 2;
+            }
+
+            if(prevKState.IsKeyUp(Keys.W) &&
+               currKState.IsKeyDown(Keys.W))
+            {
+                _selectIndex = (_selectIndex - 1 + 2) % 2;
+            }
+
+            if(prevKState.IsKeyUp(Keys.Enter) &&
+               currKState.IsKeyDown(Keys.Enter))
+            {
+                if(_selectIndex == 0)
+                {
+                    return 0;
+                }
+                else if(_selectIndex == 1)
+                {
+                    return 1;
+                }
+            }
+
+            return -1;
         }
 
         public static void DrawMenu(SpriteBatch spriteBatch)
@@ -41,7 +75,16 @@ namespace Asteroids
                 );
             }
 
-            DrawCenteredText(spriteBatch, "Press ENTER to Start", 100f, Color.MediumPurple);
+            // Draw menu options
+            Color playColor = (_selectIndex == 0) ? Color.Gold : Color.MediumPurple;
+            string playText = (_selectIndex == 0) ? "> PLAY <" : "PLAY";
+            DrawCenteredText(spriteBatch, playText, 50f, playColor, 1.5f);
+
+            Color exitColor = (_selectIndex == 1) ? Color.Gold : Color.MediumPurple;
+            string exitText = (_selectIndex == 1) ? "> EXIT <" : "EXIT";
+            DrawCenteredText(spriteBatch, exitText, 100f, exitColor, 1.5f);
+
+            DrawCenteredText(spriteBatch, "Use W/S to Navigate, ENTER to Select", 200f, Color.DarkOrchid, 0.7f);
         }
 
         public static void DrawGameplay(SpriteBatch spriteBatch)

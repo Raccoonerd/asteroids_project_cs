@@ -15,14 +15,19 @@ public enum GameState
 
 public class Game1 : Game
 {
+    // Graphics and rendering
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    // Game state management
     private GameState _currGameState = GameState.Menu;
     private KeyboardState _prevKState;
     private KeyboardState _currKState;
 
+    // Player entity
     private Player _player;
+
+    // Assets
     private SpriteFont _font;
 
     private Texture2D _shipTexture;
@@ -106,10 +111,14 @@ public class Game1 : Game
         switch(_currGameState)
         {
             case GameState.Menu:
-                if(_prevKState.IsKeyUp(Keys.Enter) &&
-                    _currKState.IsKeyDown(Keys.Enter))
+                int menuChoice = UIManager.UpdateMenu(_currKState, _prevKState);
+                if(menuChoice == 0)
                 {
                     StartGame();
+                }
+                else if(menuChoice == 1)
+                {
+                    Environment.Exit(0);
                 }
                 break;
             case GameState.Playing:
@@ -182,7 +191,7 @@ public class Game1 : Game
         base.Draw(gameTime);
     }
 
-    private void StartGame()
+    public void StartGame()
     {
         GameManager.Reset();
 
