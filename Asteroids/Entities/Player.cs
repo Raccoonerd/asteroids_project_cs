@@ -15,6 +15,12 @@ namespace Asteroids
 
         private float _rotationSpeed = 3.5f;
 
+        private const int _frameWidth = 32;
+        private const int _frameHeight = 32;
+        private int _currFrame = 0;
+        private float _timer = 0;
+        private float _animInterval = 0.1f;
+
         private KeyboardState _prevKeyState;
         private KeyboardState _currKeyState;
 
@@ -23,7 +29,8 @@ namespace Asteroids
 
         public Player(Texture2D texture, Vector2 startPos) : base(texture, startPos)
         {
-            
+            _origin = new Vector2(_frameWidth / 2f, _frameWidth / 2f);
+            _radius = (_frameWidth / 2f) * _scale;
         }
 
         public override void Update(GameTime gameTime, Viewport viewport)
@@ -42,7 +49,23 @@ namespace Asteroids
 
             if (_currKeyState.IsKeyDown(Keys.W))
             {
+                // Physics
                 _velocity += direction * _thrust * deltaTime;
+
+                // Animation
+                _timer += deltaTime;
+                if(_timer > _animInterval)
+                {
+                    _timer = 0;
+
+                    if(_currFrame == 0) _currFrame = 1;
+                    else _currFrame = (_currFrame == 1) ? 2 : 1;
+                } 
+            }
+            else
+            {
+               _currFrame = 0;
+               _timer = 0; 
             }
 
             // Apply drag
@@ -71,6 +94,28 @@ namespace Asteroids
             _prevKeyState = _currKeyState;
 
             base.Update(gameTime, viewport);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Rectangle sourceRect = new Rectangle(
+                _currFrame * _frameWidth,
+                0,
+                _frameWidth,
+                _frameHeight
+            );
+
+            spriteBatch.Draw(
+                _texture,
+                _position,
+                sourceRect,
+                Color.White,
+                _rotation,
+                _origin,
+                new Vector2(_scale, _scale),
+                SpriteEffects.None,
+                0f
+            );
         }
     }
 }

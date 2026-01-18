@@ -20,7 +20,7 @@ namespace Asteroids
 
             // Setting origin and radius for collision detection
             _origin = new Vector2(_frameWidth / 2f, _frameWidth / 2f);
-            _radius = (_frameWidth / 2f) * _scale;
+            _radius = (_frameWidth / 2f)/2 * _scale;
         }
 
         public override void Update(GameTime gameTime, Viewport viewport)
