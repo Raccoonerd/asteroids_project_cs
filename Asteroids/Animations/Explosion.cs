@@ -22,6 +22,7 @@ namespace Asteroids
 
         public override void Update(GameTime gameTime, Viewport viewport)
         {
+            // Updating timer and frame
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if(_timer >= _interval)
             {
@@ -37,6 +38,7 @@ namespace Asteroids
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            // Calculating source rectangle for current frame
             Rectangle sourceRect = new Rectangle(
                 _currentFrame * _frameWidth,
                 0,
@@ -44,6 +46,7 @@ namespace Asteroids
                 _texture.Height
             );
 
+            // Drawing the explosion frame
             spriteBatch.Draw(
                 _texture,
                 _position,

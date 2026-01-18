@@ -79,6 +79,7 @@ namespace Asteroids
                 _explosionSound.Play();
                 GameManager.AddScore(10);
 
+                // Spawn explosion
                 Asteroid asteroid = e1 is Asteroid ? (Asteroid)e1 : (Asteroid)e2;
                 Asteroid.SpawnExplosion(asteroid);
             }
